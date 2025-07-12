@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Nuker Web</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            /* Color Palette */
+            --bg-dark: #1e1e2d;         /* Primary Dark Background */
+            --bg-card: #2a2a40;         /* Card/Container Background */
+            --text-light: #e0e0e0;      /* Light Text */
+            --text-medium: #b0b0b0;     /* Medium Gray Text */
+            --accent-blue: #0077ff;     /* Light Blue Accent (for headings, focus) */
+            --accent-purple: #0077ff;   /* Purple Accent (buttons) */
+            --accent-green: #50fa7b;    /* Green for Success/Log */
+            --accent-red: #ff5555;      /* Red for Error */
+            --border-color: #3b3b55;    /* Subtle Border */
+            --input-bg: #34344a;        /* Input Background */
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center; /* Center content vertically initially */
+            min-height: 100vh;
+            box-sizing: border-box;
+            overflow-y: auto; /* Allow scrolling for content overflow */
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .background-blur {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* --- LOKASI MENGGANTI GAMBAR LATAR BELAKANG --- */
+            background: url('/static/background.gif') no-repeat center center fixed;
+            background-size: cover;
+            filter: blur(5px) brightness(0.9); /* Efek buram dan gelap */
+            z-index: -1;
+            transform: scale(1.05);
+        }
+
+        .container {
+            /* --- MODIFIKASI UNTUK CONTAINER BURAM TRANSPARAN --- */
+            background-color: rgba(42, 42, 64, 0.5); /* Warna dasar kartu, dengan transparansi lebih (0.5) */
+            backdrop-filter: blur(10px); /* Efek buram pada latar belakang di belakang container */
+            -webkit-backdrop-filter: blur(10px); /* Dukungan untuk browser berbasis WebKit */
+            border: 1px solid rgba(59, 59, 85, 0.5); /* Border yang lebih transparan */
+            overflow: hidden; /* Penting untuk backdrop-filter agar berfungsi di tepi */
+            
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-color);
+            max-width: 750px;
+            width: 90%;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            margin: 20px auto;
+            animation: fadeIn 0.8s ease-out;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: left;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent-blue);
+            margin-bottom: 35px;
+            font-size: 2.8rem;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            text-shadow: 0 0 15px rgb(55, 0, 255);
+            width: 100%; /* Agar bisa rata tengah di dalam container flex */
+        }
+
+        /* --- Input, Textarea, Select Styling --- */
+        input[type="text"],
+        input[type="password"],
+        textarea,
+        select {
+            width: 100%; /* Akan dibatasi oleh max-width di bawah */
+            max-width: 500px; /* Batasi lebar untuk tampilan di tengah */
+            padding: 14px;
+            margin: 0 auto 25px auto; /* Tengah secara horizontal, jaga margin bawah */
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            color: var(--text-light);
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+            display: block; /* Pastikan ini adalah blok agar margin auto berfungsi */
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(0, 208, 255, 0.2);
+        }
+        
+        input[readonly] {
+            background-color: var(--input-bg);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* --- Submit Button Styling --- */
+        input[type="submit"] {
+            background-color: var(--accent-purple);
+            color: white;
+            padding: 16px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            width: 100%; /* Akan dibatasi oleh max-width */
+            max-width: 300px; /* Batasi lebar tombol */
+            margin: 30px auto 0 auto; /* Tengah secara horizontal dan jarak atas */
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgb(0, 119, 255);
+            font-family: 'Poppins', sans-serif;
+            display: block; /* Pastikan ini adalah blok agar margin auto berfungsi */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #c9a7ff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(189, 147, 249, 0.6);
+        }
+
+        /* --- Flash Messages --- */
+        .flash-message {
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+            font-size: 1rem;
+            transition: opacity 0.5s ease-out;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+        .flash-message.error {
+            background-color: rgba(255, 85, 85, 0.2);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+        .flash-message.success {
+            background-color: rgba(80, 250, 123, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        /* --- Form Group & Labels --- */
+        .form-content-wrapper {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            width: 100%;
+            text-align: left;
+            position: relative; /* Diperlukan untuk penempatan ikon password di dalamnya */
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 400;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            text-align: left;
+        }
+        
+        /* --- Radio Group Styling --- */
+        .radio-group {
+            margin-bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .radio-group div {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        .radio-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+            margin-bottom: 0;
+            transform: scale(1.1);
+            flex-shrink: 0;
+            width: auto;
+            max-width: none;
+        }
+        
+        /* --- Custom Amount/Server Divs --- */
+        #customAmountDiv, #customServerDiv {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            box-sizing: border-box;
+            text-align: left;
+        }
+        #customAmountDiv label, #customServerDiv label {
+            font-weight: 300;
+            margin-bottom: 10px;
+            color: var(--text-light);
+            text-align: left;
+        }
+        #customAmountDiv input, #customServerDiv input {
+            margin: 0 auto 0 auto;
+            width: 100%;
+            max-width: 200px;
+        }
+        #customServerDiv {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        #customServerDiv label {
+            flex: 1 1 100%;
+        }
+        #customServerDiv input {
+            flex: 1 1 calc(50% - 10px);
+        }
+        #customServerDiv input:last-child {
+            flex: 0 0 auto;
+            width: auto;
+        }
+
+        /* --- Owner Info Section --- */
+        .owner-info {
+            margin-top: 30px;
+            text-align: center;
+            color: var(--text-medium);
+            font-size: 0.85rem;
+            width: 100%;
+        }
+        .owner-info p {
+            margin: 5px 0;
+        }
+
+        /* --- Password Toggle Specific Styles --- */
+        .password-input-container {
+            position: relative; /* Kontainer ini harus relative untuk absolute positioning icon */
+            display: block; /* Agar mengambil lebar penuh dan margin auto berfungsi */
+            width: 100%; /* Ambil lebar penuh form-group */
+            max-width: 500px; /* Cocokkan max-width input lain */
+            margin: 0 auto 25px auto; /* Tengah kontainer ini */
+        }
+        .password-input-container input[type="password"],
+        .password-input-container input[type="text"] { /* Target input di dalam kontainer ini */
+            width: 100%; /* Ambil lebar penuh kontainer */
+            padding-right: 45px; /* Tambahkan padding kanan untuk ikon */
+            margin: 0; /* Hapus margin otomatis di sini agar tidak konflik */
+            border-radius: 8px; /* Sudut membulat penuh untuk input */
+            /* Border sudah diatur oleh input general */
+        }
+        .password-toggle {
+            position: absolute; /* Posisikan ikon secara absolut */
+            right: 15px; /* Jarak dari kanan input */
+            top: 50%; /* Tengah vertikal */
+            transform: translateY(-50%); /* Penyesuaian presisi tengah vertikal */
+            cursor: pointer;
+            color: var(--text-medium);
+            font-size: 1rem;
+            transition: color 0.2s ease;
+            background-color: transparent; /* Pastikan transparan agar tidak menutupi input */
+            border: none; /* Hapus border */
+            padding: 0; /* Hapus padding */
+            width: auto; /* Biarkan lebarnya sesuai ikon */
+            height: auto; /* Biarkan tingginya sesuai ikon */
+        }
+        .password-toggle:hover {
+            color: var(--text-light);
+        }
+        .password-toggle i { /* Style the Font Awesome icon inside */
+            line-height: 1; /* Membantu penempatan vertikal ikon */
+        }
+
+        /* --- Submission Status Message (appears before page reload) --- */
+        #submissionStatus {
+            background-color: rgba(0, 119, 255, 0.1);
+            color: var(--accent-blue);
+            border: 1px solid var(--accent-blue);
+            padding: 15px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            font-size: 1rem;
+            margin-top: 20px;
+            display: none; /* Hidden by default */
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
+
+        /* --- Responsive Adjustments --- */
+        @media (max-width: 768px) {
+            .container { padding: 25px; border-radius: 10px; width: 95%; }
+            h1 { font-size: 2.2rem; margin-bottom: 25px; }
+            input[type="text"], input[type="password"], textarea, select { padding: 12px; margin-bottom: 20px; max-width: 100%; }
+            input[type="submit"] { padding: 14px 25px; font-size: 1.1rem; max-width: 100%; margin: 20px auto 0 auto; }
+            .flash-message { font-size: 0.95rem; padding: 12px 15px; max-width: 100%; }
+            #customAmountDiv, #customServerDiv { padding: 15px; }
+            #customAmountDiv input, #customServerDiv input { max-width: 100%; margin: 0 auto 0 auto; }
+            
+            /* Password toggle responsive adjustments */
+            .password-input-container { max-width: 100%; margin: 0 auto 20px auto; }
+            .password-input-container input { padding-right: 45px; } /* Sesuaikan padding kanan input */
+            #submissionStatus { max-width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; align-items: flex-start; }
+            .container { padding: 20px; border-radius: 8px; margin-top: 10px; margin-bottom: 10px; }
+            h1 { font-size: 1.8rem; margin-bottom: 20px; }
+            input[type="text"], input[type="password"], textarea, select { font-size: 0.9rem; padding: 10px; margin-bottom: 15px; }
+            input[type="submit"] { font-size: 1rem; padding: 12px 20px; }
+            .flash-message { font-size: 0.85rem; padding: 10px; }
+            #customServerDiv { flex-direction: column; }
+            #customServerDiv input { flex: 1 1 100%; }
+            #customAmountDiv input { margin: 0 auto 0 auto; }
+
+            /* Password toggle responsive adjustments */
+            .password-input-container { margin: 0 auto 15px auto; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-blur"></div>
+
+    <div class="container" id="mainFormContainer">
+        <h1>Email Bomb 💣</h1>
+
+        {# Display flash messages from Flask after redirect #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="form-content-wrapper"> {# Kontainer baru untuk elemen formulir #}
+            <form id="bombForm" action="/bomb_email" method="post">
+                <div class="form-group">
+                    <label for="target_email">Target Email :</label>
+                    <input type="text" id="target_email" name="target_email" placeholder="e.g., victim@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bomb_mode">Bomb Mode :</label>
+                    <select id="bomb_mode" name="bomb_mode" onchange="toggleCustomAmount()">
+                        <option value="1">1000 emails</option>
+                        <option value="2">500 emails</option>
+                        <option value="3">250 emails</option>
+                        <option value="4">Custom</option>
+                    </select>
+                    <div id="customAmountDiv" style="display:none;">
+                        <label for="custom_amount">Custom Amount :</label>
+                        <input type="text" id="custom_amount" name="custom_amount" placeholder="e.g., 150">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email_server">Attacker Email Server :</label>
+                    <select id="email_server" name="email_server" onchange="toggleCustomServer()">
+                        <option value="1">Gmail (smtp.gmail.com)</option>
+                        <option value="2">Yahoo (smtp.mail.yahoo.com)</option>
+                        <option value="3">Outlook (smtp-mail.outlook.com)</option>
+                        <option value="4">Custom</option>
+                    </select>
+                    <div id="customServerDiv" style="display:none;">
+                        <label for="custom_server">Custom Server Address :</label>
+                        <input type="text" id="custom_server" name="custom_server" placeholder="e.g., smtp.myevilhost.net">
+                        <label for="custom_port">Port:</label>
+                        <input type="text" id="custom_port" name="custom_port" value="587" placeholder="e.g., 465">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="attacker_email">Sender Email ( Attacker ) :</label>
+                    <input type="text" id="attacker_email" name="attacker_email" placeholder="e.g., your.burner@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="attacker_password">Sender Password ( Attacker ) :</label>
+                    <div class="password-input-container">
+                        <input type="password" id="attacker_password" name="attacker_password" placeholder="Your app password or email password" required>
+                        <span class="password-toggle" id="passwordToggle">
+                            <i class="fa fa-eye"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">Email Subject :</label>
+                    <input type="text" id="subject" name="subject" value="Default" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Email Message :</label>
+                    <textarea id="message" name="message" rows="6" placeholder="Your important message goes here..." required></textarea>
+                </div>
+
+                <input type="submit" value="Initiate Operation">
+            </form>
+        </div>
+
+        <div class="owner-info"> FSOCIETY
+            <p>Developed by [ Jcllynnaf / Jcllynncode ]</p>
+            <p>Contact : <a href="mailto:heroinfatherfsociety@gmail.com" style="color: var(--accent-blue); text-decoration: none;">heroinfatherfsociety@gmail.com</a></p>
+        </div>
+    </div>
+
+    <div id="submissionStatus">
+        Sending bombs to targets is in progress... Please wait...
+    </div>
+
+    <script>
+        // Form visibility toggles
+        function toggleCustomAmount() {
+            var customAmountDiv = document.getElementById('customAmountDiv');
+            var bombModeSelect = document.getElementById('bomb_mode');
+            if (bombModeSelect.value === '4') {
+                customAmountDiv.style.display = 'block';
+            } else {
+                customAmountDiv.style.display = 'none';
+            }
+        }
+
+        function toggleCustomServer() {
+            var customServerDiv = document.getElementById('customServerDiv');
+            var emailServerSelect = document.getElementById('email_server');
+            if (emailServerSelect.value === '4') {
+                customServerDiv.style.display = 'flex'; /* Use flex for internal layout */
+            } else {
+                customServerDiv.style.display = 'none';
+            }
+        }
+
+        // --- Hide/Show Password Logic ---
+        const passwordInput = document.getElementById('attacker_password');
+        const passwordToggle = document.getElementById('passwordToggle');
+
+        passwordToggle.addEventListener('click', function() {
+            // Toggle the type attribute
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            
+            // Toggle the eye icon
+            this.querySelector('i').classList.toggle('fa-eye');
+            this.querySelector('i').classList.toggle('fa-eye-slash');
+        });
+
+        // --- Submission Status Message Logic ---
+        const bombForm = document.getElementById('bombForm');
+        const submissionStatusDiv = document.getElementById('submissionStatus');
+        const mainFormContainer = document.getElementById('mainFormContainer'); // Re-using existing ID
+
+        bombForm.addEventListener('submit', function(event) {
+            // Client-side validation before showing status message
+            if (!bombForm.checkValidity()) {
+                bombForm.reportValidity(); // Show HTML5 validation messages
+                return; // Stop here if form is invalid
+            }
+
+            // Show the "in progress" message
+            mainFormContainer.style.display = 'none'; // Hide the form container
+            submissionStatusDiv.style.display = 'block'; // Show the status message
+            
+            // Allow the form to submit normally after this JavaScript runs
+            // (No event.preventDefault() here, so the form will submit and page will reload)
+        });
+
+
+        // Initialize display states on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            toggleCustomAmount();
+            toggleCustomServer();
+        });
+    </script>
+</body>
+</html>
