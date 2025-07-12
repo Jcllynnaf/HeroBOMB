@@ -5,6 +5,7 @@ This is a more advanced email bomber with some more functionality and bug fixes.
 * First :
 ```
 git clone https://github.com/Jcllynnaf/HeroBOMB.git
+cd HeroBOMB
 ```
 * Run the herobomb.py file :
 ```
@@ -23,14 +24,14 @@ python herobomb.py
 ## Exaple Run...
 * This is an example run :
 
-![002]()
+![002](https://raw.githubusercontent.com/Jcllynnaf/HeroBOMB/refs/heads/main/templates/2.jpg)
 
 * This is a condition that arises for bombs > 50. This is a part of the process and totally normal:
 
-![004]()
+![004](https://raw.githubusercontent.com/Jcllynnaf/HeroBOMB/refs/heads/main/templates/1.jpg)
 
 ## Result Image
-![003]()
+![003](https://raw.githubusercontent.com/Jcllynnaf/HeroBOMB/refs/heads/main/templates/3.jpg)
 
 ## Disclaimer !!
 
@@ -46,8 +47,8 @@ Contribution is very accepted!If you find a problem or have suggestions for impr
 
 ## 📞 Contact & Support  
 
-🔗 **Instagram:** [jcllynnaf](https://instagram.com/jcllynncode)  
-📸 **Instagram:** [@jcllynnaf](https://instagram.com/jcllynnaf)    
+🔗 **Instagram:** [@jcllynnaf](https://instagram.com/jcllynnaf)  
+📸 **Instagram:** [@jcllynncode](https://instagram.com/jcllynncode)    
 
 **Developed by :** 🛠 **Jcllynncode / Jcllynnaf**  
 
