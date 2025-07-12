@@ -24,11 +24,9 @@ python herobomb.py
 ## Exaple Run...
 * This is an example run :
 
-![002](https://raw.githubusercontent.com/Jcllynnaf/HeroBOMB/refs/heads/main/templates/2.jpg)
+![002](https://raw.githubusercontent.com/Jcllynnaf/HeroBOMB/refs/heads/main/templates/1.jpg)
 
-* This is a condition that arises for bombs > 50. This is a part of the process and totally normal:
-
-![004](https://raw.githubusercontent.com/Jcllynnaf/HeroBOMB/refs/heads/main/templates/1.jpg)
+![004](https://raw.githubusercontent.com/Jcllynnaf/HeroBOMB/refs/heads/main/templates/2.jpg)
 
 ## Result Image
 ![003](https://raw.githubusercontent.com/Jcllynnaf/HeroBOMB/refs/heads/main/templates/3.jpg)
